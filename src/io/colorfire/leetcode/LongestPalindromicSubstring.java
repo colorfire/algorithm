@@ -1,6 +1,7 @@
 package io.colorfire.leetcode;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,17 +15,25 @@ public class LongestPalindromicSubstring {
   public String longestPalindrome(String s) {
     if (s == null || s == "") return null;
 
-    Map<Character, Integer> map = new HashMap<>();
-    String res = "";
+    Map<Character, ArrayList<Integer>> map = new HashMap<>();
+    String res = s.charAt(0) + "";
 
     for (int i = 0; i < s.length(); i++) {
       char c = s.charAt(i);
       if (map.containsKey(c)) {
         // 比对字符串, 如果是回文就放到结果集, 如果不是继续循环
-        String tmp = isPalindrome(s, map.get(c), i);
-        if (tmp.length() > res.length()) res = tmp;
+        ArrayList<Integer> a = map.get(c);
+        for (int ai : a) {
+          String tmp = isPalindrome(s, ai, i);
+          if (tmp.length() > res.length()) res = tmp;
+        }
+
+        a.add(i);
+        map.put(c, a);
       } else {
-        map.put(c, i);
+        ArrayList<Integer> a = new ArrayList<>();
+        a.add(i);
+        map.put(c, a);
       }
 
     }
@@ -35,12 +44,41 @@ public class LongestPalindromicSubstring {
     for (int i = start, j = end; i < j; i++, j--) {
       if (s.charAt(i) != s.charAt(j)) return "";
     }
-    return s.substring(start, end);
+    return s.substring(start, end + 1); // TODO: substring api need plus one.
   }
 
   public static void main(String[] args) {
-//    System.out.println(new LongestPalindromicSubstring().longestPalindrome("babad"));
-    System.out.println("babad".substring(0,2));
+    long startTime = System.currentTimeMillis();
+    System.out.println(new LongestPalindromicSubstring().longestPalindrome("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+    System.out.println("算法1执行时间: " + (System.currentTimeMillis() - startTime) + "ms");
+
+    startTime = System.currentTimeMillis();
+    System.out.println(new LongestPalindromicSubstring().otherSolution("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+    System.out.println("算法2执行时间: " + (System.currentTimeMillis() - startTime) + "ms");
+
+  }
+
+
+  int low;
+  int high;
+
+  private String otherSolution(String s) {
+    for (int i = 0; i < s.length(); i++) {
+      isPalindromeTwo(s, i, i);
+    }
+    return s.substring(low, high);
+  }
+
+
+  private void isPalindromeTwo(String s, int start, int end) {
+    while (start > 0 && end < s.length() && s.charAt(start) == s.charAt(end)) {
+      start--;
+      end++;
+    }
+    if ((end-start) > (high-low)) {
+      low = start;
+      high = end;
+    }
   }
 
 }
