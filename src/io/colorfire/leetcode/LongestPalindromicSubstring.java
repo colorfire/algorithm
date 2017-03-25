@@ -59,19 +59,20 @@ public class LongestPalindromicSubstring {
   private String otherSolution(String s) {
     for (int i = 0; i < s.length(); i++) {
       isPalindromeTwo(s, i, i);
+      isPalindromeTwo(s, i, i + 1);
     }
-    return s.substring(low, high);
+    return s.substring(low, high + 1);
   }
 
 
   private void isPalindromeTwo(String s, int i, int j) {
-    while (i > 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
+    while (i >= 0 && j < s.length() && s.charAt(i) == s.charAt(j)) {
       i--;
       j++;
     }
-    if ((j - i) > (high - low)) {
-      low = i;
-      high = j;
+    if ((j - i - 2) > (high - low)) {
+      low = i + 1;
+      high = j - 1;
     }
   }
 
@@ -81,7 +82,7 @@ public class LongestPalindromicSubstring {
     System.out.println("算法1执行时间: " + (System.currentTimeMillis() - startTime) + "ms");
 
     startTime = System.currentTimeMillis();
-    System.out.println(new LongestPalindromicSubstring().otherSolution("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+    System.out.println(new LongestPalindromicSubstring().otherSolution("babad"));
     System.out.println("算法2执行时间: " + (System.currentTimeMillis() - startTime) + "ms");
 
   }
